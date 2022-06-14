@@ -75,7 +75,7 @@ function no_test_found()
 {
     /*
         This function display en Error message, when there are no results to display
-        or whene there are no results to compare (only partial results exists)
+        or when there are no results to compare (only partial results exists)
     */
 
     BR(3, 2, true) ;
@@ -90,14 +90,14 @@ function validate_input($name, $key, $line = 0)
         Args:
             $name (str): The name of the variable to verify - use for display only
             $key (str):  The name of the field in the form (and in query string)
-            $line (int): the number of the tets (in comparisone mode)
-                        default is 0 for one test display (no comparisone)
+            $line (int): the number of the tets (in comparison mode)
+                        default is 0 for one test display (no comparison)
 
                         Return:
             bool : true if data is valid, otherwise false
     */
 
-    global $All_sql ;        // array of all comparisone tests [size = $Compare_tests]
+    global $All_sql ;        // array of all comparison tests [size = $Compare_tests]
     global $input_data ;     // the URL query string
     global $OK_to_display ;  // is it ok to display the results
 
@@ -197,22 +197,8 @@ function get_result_data($sql)
                     $results[$i][$ind] = [] ;
                 }
             }
-            //echo ' A) The number of results for tests number : ' . $i . ' is : ' . count($results[$i]) . " !---\n";
-            //echo print_r($results) ;
-            //NL(1) ;
-            //BR(1, 1, 1);
         }
-        //echo ' B) The number of results for tests number : ' . $i . ' is : ' . count($results[$i]) . " !---\n";
-        //HR(1) ;
-        //echo print_r($results) ;
-        //NL(1) ;
     }
-    //echo ' C) The number of results is : ' . count($results) ;
-    //NL(1);
-    //HR(1) ;
-    //echo print_r($results) ;
-    //NL(1) ;
-    //$total_to_compare = count($results) ;
     return $results ;
 }
 
@@ -228,7 +214,6 @@ function verify_all_inputs($ind)
     */
 
     global $All_sql;
-    //H(3, "Verify inputs for test number $ind", 1);
     // initiate the sql quarry
     $All_sql[$ind] = 'SELECT log_file,es_link FROM `results` WHERE';
 
@@ -242,7 +227,6 @@ function verify_all_inputs($ind)
         $All_sql[$ind] .= ' AND ';
         validate_input('Test name', 'test_name', $ind);
     }
-    //H(3, "The sql query for test number $ind is $All_sql[$ind]", 1);
 }
 
 function read_full_test_results($testid)
@@ -255,17 +239,9 @@ function read_full_test_results($testid)
     global $all_res_data;
     $OK = true;
     $total_to_compare = 0;
-    /*
-    if (isset($input_data['build_run']) && $input_data['build_run'] != 'null') {
-        BR(1, 1, 1) ;
-        echo '-----' . $All_sql[1] . '=======' ;
-        BR(1, 1, 1) ;
-    }
-    */
-    //BR(1,1,1) ;echo "-----" . $GLOBALS['Compare_tests'] . "=======" ;BR(1,1,1) ;
+
     for ($ind = 1 ; $ind <= $GLOBALS['Compare_tests'] ; $ind++) {
         $sql = '';
-        //BR(1,1,1) ;echo "Ind = " . $ind ; BR(1,1,1) ;
         if (substr($All_sql[$ind], -1) == ' ') {
             $sql = $All_sql[$ind] . 'test_name = ' . $testid ;
             if (!(isset($input_data['build_run']) && $input_data['build_run'] != 'null')) {
@@ -274,24 +250,14 @@ function read_full_test_results($testid)
         } else {
             $sql = $All_sql[$ind] ;
         }
-        //H(3, "Reading data for test number $ind, by running \n $sql",1);
-        //BR(1,1,1);echo "Kuku = " . $sql ; BR(1,1,1);
         if ($sql != '') {
-            //BR(1, 1, 1) ;
-            //echo '-----' . $sql . '----' ;
-            //BR(1, 1, 1) ;
             $test_results[$ind] = $conn->query($sql);
-            //echo 'test results are : ' . print_r($test_results[$ind]>fetch_array()) ; BR(1,1,1) ;
             if ($test_results[$ind] != null) {
                 $num_of_res = $test_results[$ind]->num_rows ;
                 if ($ind == 1 and $num_of_res > 1 and $GLOBALS['Compare_tests'] > 1) {
                     if (!(isset($input_data['build_run']) && $input_data['build_run'] != 'null')) {
                         H(2, 'There are more then one test results [' . $num_of_res . '] - Can not make comparison') ;
                         $OK = false ;
-                        //} else {
-                    //    BR(1, 1, 1) ;
-                    //    echo '----- ' . $num_of_res . '----' ;
-                    //    BR(1, 1, 1) ;
                     }
                 }
                 if ($num_of_res == 0) {
@@ -299,9 +265,6 @@ function read_full_test_results($testid)
                 }
                 $total_to_compare++ ;
                 $all_res_data[$ind] = get_result_data($sql) ;
-                //BR(1, 1, 1) ;
-                //echo 'All Results of ' . $ind . ' are : ' . print_r($all_res_data[$ind]) ;
-                //BR(1, 1, 1) ;
                 for ($i = 1 ; $i <= count($all_res_data[$ind]) ; $i++) {
                     if (count($all_res_data[$ind][$i]) < 1) {
                         $OK = false ;
@@ -364,7 +327,7 @@ function create_build_report()
     return ;
 }
 
-// Read the URL quary_string into a variable - $input_data
+// Read the URL quarry_string into a variable - $input_data
 read_quary_string() ;
 
 // open connection to the MySQL Database
@@ -422,8 +385,7 @@ if (isset($input_data['submit'])) {
                 
                     debug('Generating comparisone report for ' . count($all_res_data) . ' tests') ;
                     print_test_configuration($all_res_data) ;
-                    //echo "<h2>Test name is : " . strtolower($test_name) . "</h2></br>\n" ;
-                    if (strtolower($test_name) == 'fio') {
+                     if (strtolower($test_name) == 'fio') {
                         print_fio_test_results() ;
                     }
                     if (strtolower($test_name) == 'fio-compress') {
@@ -453,9 +415,6 @@ if (isset($input_data['submit'])) {
                     if (strtolower($test_name) == 'pvc snapshot') {
                         print_pvc_snapshot_results() ;
                     }
-                    //if (strtolower($test_name) == 'pvc multiple-delete') {
-                    //    print_pvc_multiple_delete_results() ;
-                    //}
                     if (strtolower($test_name) == 'bulk pod attach time') {
                         print_bulk_pod_attach_time_results() ;
                     }
@@ -489,7 +448,7 @@ if (isset($input_data['submit'])) {
 
             close_div(2) ;
 
-            // make the first test tab avaliable (Active) and show it to the user
+            // make the first test tab available (Active) and show it to the user
             if ($i == 0) {
                 NL(1) ;
                 echo Tab(2) . "<script>openFirstTest('" . $test_name . "')</script>";
