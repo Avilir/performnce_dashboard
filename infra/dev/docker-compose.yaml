@@ -1,0 +1,44 @@
+---
+version: "3.8"
+services:
+  web-server:
+    build:
+      dockerfile: Containerfile.php
+      context: .
+    restart: always
+    volumes:
+      - "../..//html/:/var/www/html/"
+    ports:
+      - "8080:80"
+  
+  db-server:
+    image: mariadb:10.8.3
+    restart: always
+    command: --init-file /data/application/init.sql
+    environment:
+      MYSQL_DATABASE: app1
+      MYSQL_USER: ocsqe
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_password
+      - db_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - "../../database:/var/lib/mysql"
+      - "../create_db.sql:/data/application/init.sql"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.2.0
+    restart: always
+    environment:
+      PMA_HOST: db-server
+    ports:
+      - "8082:80"
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
