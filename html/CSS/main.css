@@ -1,0 +1,216 @@
+/**** main.css ***/
+html {
+    background: url(../img/html-background.png);
+    background-color: white;
+    font-family: "DejaVu Sans", "Liberation Sans", sans-serif;
+    font-size: 0.85em;
+    line-height: 1.25em;
+    margin: 0 4% 0 4%;
+}
+
+body {
+    border: 10px solid #fff;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+
+iframe {
+    overflow:hidden; 
+    border:none;
+    height:350px;
+    width:500px;
+}
+
+.lineg {
+    overflow:hidden; 
+    border: None;
+    height:500px;
+    width:700px;
+}
+
+/* Links */
+
+a:link {
+    border-bottom: 1px dotted #ccc;
+    text-decoration: none;
+    color: #204d92;
+}
+
+a:hover {
+    border-bottom: 1px dotted #ccc;
+    text-decoration: underline;
+    color: green;
+}
+
+a:active {
+    border-bottom: 1px dotted #ccc;
+    text-decoration: underline;
+    color: #204d92;
+}
+
+a:visited {
+    border-bottom: 1px dotted #ccc;
+    text-decoration: none;
+    color: #204d92;
+}
+
+a:visited:hover {
+    border-bottom: 1px dotted #ccc;
+    text-decoration: underline;
+    color: green;
+}
+
+.mainlinks a:link {
+    border-bottom: 1px dotted #ddd;
+    text-decoration: none;
+    color: #eee;
+}
+
+.mainlinks a:hover {
+    border-bottom: 1px dotted #ddd;
+    text-decoration: underline;
+    color: white;
+}
+
+.mainlinks a:active {
+    border-bottom: 1px dotted #ddd;
+    text-decoration: underline;
+    color: white;
+}
+
+.mainlinks a:visited {
+    border-bottom: 1px dotted #ddd;
+    text-decoration: none;
+    color: white;
+}
+
+.mainlinks a:visited:hover {
+    border-bottom: 1px dotted #ddd;
+    text-decoration: underline;
+    color: white;
+}
+
+/* User interface styles */
+
+
+p {
+    line-height: 1.5em;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 0;
+    line-height: 1.9em;
+}
+
+h2 {
+    margin-top: 0;
+    line-height: 1.7em;
+    text-align: center;
+}
+
+h3 {
+    margin-top: 0;
+    line-height: 1.7em;
+    text-align: center;
+}
+
+#content {
+    clear: both;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    border-bottom: 5px solid #eee;
+}
+
+.mainlinks {
+    float: right;
+    margin-top: 0.5em;
+    text-align: right;
+}
+
+ul.mainlinks > li {
+    border-right: 1px dotted #ddd;
+    padding-right: 10px;
+    padding-left: 10px;
+    display: inline;
+    list-style: none;
+}
+
+ul.mainlinks > li.last,
+ul.mainlinks > li.first {
+    border-right: none;
+}
+
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+.fio_tbl {
+    border: 1px solid blue;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.full_test_tbl {
+    border: 0px solid black;
+    table-layout: auto;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.config_tbl {
+    border: 1px solid #E5E8EA;
+    table-layout: auto;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.config_tr, .config_td {
+    border: 0px solid gray;
+    text-align: left;
+}
+
+.uuid {
+    font-weight: bold;
+    color: #82B5DE;
+}
+
+.selection_form {
+    text-align: center;
+}
+
+.select_tbl, .select_th {
+    border: 0px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.select_td {
+    border: 0px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.select_td_h {
+    border: 0px solid black;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+
+.grp_frm {
+    overflow: hidden;
+    border: none;
+    width: 600px;
+    height: 350px;
+    overflow: hidden;
+}

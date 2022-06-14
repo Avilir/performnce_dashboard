@@ -1,0 +1,51 @@
+#header {
+    margin: 0 ;
+    padding: 0 ;
+    height: 90px ;
+    text-align: center ;
+    background: #204D8C url(../img/header-background.png) ;
+}
+
+.logo {
+    /* For text only logo */
+    padding: 0 ;
+    font-size: 1.4em ;
+    line-height: 0 ;
+    font-weight: bold ;
+}
+
+.logo_span {
+    float: left ;
+    text-align: center ;
+}
+
+.logo_span img {
+    height: 90px ;
+    width: 250px ;
+    padding-right: 0 ;
+    padding-left: 0 ;
+    vertical-align: text-bottom ;
+    border: 0 ;
+}
+
+.head_span {
+    float: none ;
+    text-align: center ;
+}
+
+.head_span h1 {
+    color: white;
+    text-align: center ;
+    line-height: 3em;
+}
+
+.header_tbl {
+  border: 1px solid red;
+  height: 96px ;
+  table-layout: auto;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: text-top;
+}
+

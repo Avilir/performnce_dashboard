@@ -1,0 +1,29 @@
+.test1 {
+    color: black ;
+    font-weight: bold;
+}
+.test4 {
+    color: #82B5DE ;
+    font-weight: bold;
+}
+.test2 {
+    color: #0256ED ;
+    font-size: 1em ;
+    font-weight: 900;
+}
+.test3 {
+    color: #0240B1 ;
+    font-weight: bold;
+}
+.diff_reg {
+    color: black ;
+    font-weight: bold;
+}
+.diff_pos {
+    color: green ;
+    font-weight: bold;
+}
+.diff_neg {
+    color: red ;
+    font-weight: bold;
+}
