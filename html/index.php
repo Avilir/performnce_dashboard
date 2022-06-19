@@ -1,7 +1,7 @@
 <?php
 
 require_once 'vendor/autoload.php';
-use Elasticsearch\ClientBuilder ;
+use Elastic\Elasticsearch\ClientBuilder ;
 
 require_once 'config.php';
 require_once 'secret.php';
@@ -251,8 +251,12 @@ function read_full_test_results($testid)
             $sql = $All_sql[$ind] ;
         }
         if ($sql != '') {
-            $test_results[$ind] = $conn->query($sql);
-            if ($test_results[$ind] != null) {
+            try {
+                $test_results[$ind] = $conn->query($sql);
+            } catch (Exception $ex) {
+                $test_results[$ind] = null ;
+            }
+           if ($test_results[$ind] != null) {
                 $num_of_res = $test_results[$ind]->num_rows ;
                 if ($ind == 1 and $num_of_res > 1 and $GLOBALS['Compare_tests'] > 1) {
                     if (!(isset($input_data['build_run']) && $input_data['build_run'] != 'null')) {
