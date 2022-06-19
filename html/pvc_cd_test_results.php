@@ -1,5 +1,17 @@
 <?php
 
+function storgeclass_header($vol_type, $storageclass, $start){
+    $display_header = false ;
+    if(! in_array($vol_type, $storageclass)) {
+        array_push($storageclass, $vol_type) ;
+        if ($start) { close_table(3) ; }
+        else { $start = true ; }
+        H(2, "Results for " . $vol_type, 3) ;
+        $display_header = true ;
+     }
+     return [$start, $storageclass, $display_header] ;
+}
+
 function print_pvc_cd_test_results(){
     global $all_res_data ;
     $storageclass = array() ;
@@ -10,14 +22,10 @@ function print_pvc_cd_test_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["storageclass"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_cd") ;
         }
-
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         display_data_section($ind, "creation-time", 'down') ;
@@ -37,14 +45,10 @@ function print_pvc_bulk_cd_test_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_bulk_cd") ;
         }
-
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         TD(5, '', $all_res_data[1][1][$ind]["bulk_size"]) ;
@@ -106,14 +110,10 @@ function print_pvc_bulk_cad_test_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_bulk_cad") ;
         }
-
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         TD(5, '', $all_res_data[1][1][$ind]["number_of_pvcs"]) ;
@@ -133,14 +133,10 @@ function print_pvc_snapshot_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_snap") ;
         }
- 
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         display_data_section($ind, "avg_snap_creation_time_insecs", 'down') ;
@@ -161,14 +157,10 @@ function print_pvc_snapshot_multi_files_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("multi_snap_with_files") ;
         }
-
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["file_size_inKB"]) ;
         TD(5, '', format_numbers($all_res_data[1][1][$ind]["all_results"]['total_files'])) ;
@@ -189,14 +181,10 @@ function print_pvc_clone_results(){
      
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_clone") ;
-         }
-
+        }
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         display_data_section($ind, "average_clone_creation_time", 'down') ;
@@ -217,14 +205,10 @@ function print_pvc_clone_mf_results(){
      
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_clone_mf") ;
-         }
-
+        }
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         TD(5, '', format_numbers($all_res_data[1][1][$ind]['files_number'])) ;
@@ -245,14 +229,10 @@ function print_pvc_multi_clone_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("pvc_multi_clone") ;
-         }
-
+        }
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["clone_size"]) ;
         TD(5, '', $all_res_data[1][1][$ind]["clones_num"]) ;
@@ -277,14 +257,10 @@ function print_pvc_multi_snap_results(){
     
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
         $volume_type = get_volume_type($all_res_data[1][1][$ind]["storageclass"]) ;
-        if(! in_array($volume_type, $storageclass)) {
-            array_push($storageclass, $volume_type) ;
-            if ($start) { close_table(3) ; }
-            else { $start = true ; }
-            H(2, "Results for " . $volume_type, 3) ;
+        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+        if ($disp_head) {
             display_test_results_header("multi_snap") ;
         }
- 
         start_tr(4) ;
         TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
         TD(5, '', $all_res_data[1][1][$ind]["snapshot_num"]) ;
