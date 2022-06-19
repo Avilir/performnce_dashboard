@@ -9,6 +9,6 @@ RUN docker-php-ext-configure zip
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install gd
 RUN php composer.phar require elasticsearch/elasticsearch
-RUN wget https://jpgraph.net/download/download.php?p=49 -O /usr/local/jpgraph.tgz
+RUN wget https://jpgraph.net/download/download.php?p=55 -O /usr/local/jpgraph.tgz
 RUN cd /usr/local/ ; tar -zxf jpgraph.tgz
 RUN mv /var/www/html/vendor /usr/local/
