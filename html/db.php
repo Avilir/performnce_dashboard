@@ -73,6 +73,26 @@ function get_name_by_id($table_name, $id)
     }
 }
 
+function get_id_by_name($table_name, $name)
+{
+    /* 
+    This function return a ID by its name
+
+    Args:
+        table_name (str): the name of the table
+        name (str): the name of the value in the table
+
+    Returns:
+        int : the id of the name in the table   
+    */
+
+    $sql = 'SELECT `id` FROM `' . $table_name . '` WHERE `name` = "' . $name . '";';
+    $data = $GLOBALS['conn']->query($sql) ;
+     foreach ($data as $op_data) {
+        return $op_data['id'] ;
+    }
+}
+
 function get_last_version()
 {
     /* 
@@ -172,4 +192,12 @@ function get_tests_list()
         array_push($r, $op_data['id']) ;
     }
     return $r ;
+}
+
+function get_test_data($id) {
+    $sql = "SELECT * FROM tests WHERE id = $id ;" ;
+    $data = $GLOBALS['conn']->query($sql) ;
+    foreach ($data as $op_data) {
+        return $op_data["format"] ;
+    }
 }
