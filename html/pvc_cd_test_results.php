@@ -12,208 +12,50 @@ function storgeclass_header($vol_type, $storageclass, $start){
      return [$start, $storageclass, $display_header] ;
 }
 
-function print_pvc_cd_test_results(){
+function print_test_results($test_name){
     global $all_res_data ;
     $storageclass = array() ;
     $start = false ;
 
-    BR(3, 1, true) ;
-    print_ES_links() ;
+    $test_id = get_id_by_name("tests", $test_name) ;
+    $test_data = get_test_data($test_id) ;
+    $test_data = json_decode($test_data, true) ;
     
+    BR(3, 1, true) ;
+    print_ES_links($test_data["eslink_data"]) ;
+
+    if ($test_data["heder"] == 1) {
+        display_test_results_header($test_data["head_title"]) ;
+    }
+
     for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["storageclass"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("pvc_cd") ;
+        if ($test_data["heder"] == 2) {
+            if (array_key_exists("storageclass", $all_res_data[1][1][$ind])) {
+                $volume_type = get_volume_type($all_res_data[1][1][$ind]["storageclass"]) ;
+            } else {
+                $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;               
+            }
+            list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
+            if ($disp_head) { display_test_results_header($test_data["head_title"]) ; }
         }
         start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        display_data_section($ind, "creation-time", 'down') ;
-        display_data_section($ind, "deletion-time", 'down') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_pvc_bulk_cd_test_results(){
-    global $all_res_data ;
-    $storageclass = array() ;
-    $start = false ;
-
-    BR(3, 1, true) ;
-    print_ES_links_bulk_cd() ;
-    
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("pvc_bulk_cd") ;
+        foreach ($test_data["data"] as &$col) {
+            if ($col["type"] == 1) {
+                TD(5, '', $all_res_data[1][1][$ind][$col["name"]]) ;
+            }
+            if ($col["type"] == 2) {
+                display_data_section($ind, $col["name"], 'down') ;
+            }
+            if ($col["type"] == 3) {
+                display_data_section($ind, $col["name"], 'up') ;
+            }
+            if ($col["type"] == 4) {
+                TD(5, '', count($all_res_data[1][1][$ind][$col["name"]])) ;
+            }
+            if ($col["type"] == 5) {
+                number_td($all_res_data[1][1][$ind][$col["name"]], 0 );
+            }
         }
-        start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        TD(5, '', $all_res_data[1][1][$ind]["bulk_size"]) ;
-        display_data_section($ind, "bulk_pvc_creation_time", 'down') ;
-        display_data_section($ind, "bulk_pvc_deletion_time", 'down') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_pvc_multiple_delete_results(){
-    global $all_res_data ;
-
-    BR(3, 1, true) ;
-    print_ES_links_multi_delete() ;
-    display_test_results_header("pvc_multi_delete") ;
-    
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["storageclass"]) ;
-        start_tr(4) ;
-        TD(5, '', $volume_type) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        TD(5, '', $all_res_data[1][1][$ind]["bulk_size"]) ;
-        display_data_section($ind, "bulk_deletion_time", 'down') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_bulk_clonec_create_results(){
-    global $all_res_data ;
-
-    BR(3, 1, true) ;
-    print_BClone_ES_links() ;
-    display_test_results_header("bulk_clone") ;
-    BR(3, 1, true) ;
-  
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        start_tr(4) ;
-        TD(5, '', $volume_type) ;
-        TD(5, '', $all_res_data[1][1][$ind]["clone_size"]) ;
-        TD(5, '', number_format($all_res_data[1][1][$ind]["data_size(MB)"], 0) ) ;
-        TD(5, '', $all_res_data[1][1][$ind]["bulk_size"]) ;
-        display_data_section($ind, "bulk_creation_time", 'down') ;
-        display_data_section($ind, "speed", 'up') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_pvc_bulk_cad_test_results(){
-    global $all_res_data ;
-    $storageclass = array() ;
-    $start = false ;
-
-    BR(3, 1, true) ;
-    print_CAD_ES_links() ;
-    
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("pvc_bulk_cad") ;
-        }
-        start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        TD(5, '', $all_res_data[1][1][$ind]["number_of_pvcs"]) ;
-        display_data_section($ind, "creation_after_deletion_time", 'down') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_pvc_snapshot_results(){
-    global $all_res_data ;
-    $storageclass = array() ;
-    $start = false ;
-
-    BR(3, 1, true) ;
-    print_Snap_ES_links() ;
-    
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("pvc_snap") ;
-        }
-        start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        display_data_section($ind, "avg_snap_creation_time_insecs", 'down') ;
-        display_data_section($ind, "avg_snap_restore_time_insecs", 'down') ;
-        display_data_section($ind, "avg_snap_restore_speed", 'up') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_pvc_snapshot_multi_files_results(){
-    global $all_res_data ;
-    $storageclass = array() ;
-    $start = false ;
-
-    BR(3, 1, true) ;
-    print_Snap_MF_ES_links() ;
-    
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("multi_snap_with_files") ;
-        }
-        start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["file_size_inKB"]) ;
-        TD(5, '', format_numbers($all_res_data[1][1][$ind]["all_results"]['total_files'])) ;
-        TD(5, '', $all_res_data[1][1][$ind]["all_results"]['total_dataset']) ;
-        display_data_section($ind, "avg_snapshot_creation_time_insecs", 'down') ;
-        close_tr(4) ;       
-    }
-    close_table(3) ;
-}
-
-function print_pvc_clone_results(){
-    global $all_res_data ;
-    $storageclass = array() ;
-    $start = false ;
-
-    BR(3, 1, true) ;
-    print_Clone_ES_links() ;
-     
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("pvc_clone") ;
-        }
-        start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        display_data_section($ind, "average_clone_creation_time", 'down') ;
-        display_data_section($ind, "average_clone_creation_speed", 'up') ;
-        display_data_section($ind, "average_clone_deletion_time", 'down') ;
-        close_tr(4) ;        
-    }
-    close_table(3) ;
-}
-
-function print_pvc_clone_mf_results(){
-    global $all_res_data ;
-    $storageclass = array() ;
-    $start = false ;
-
-    BR(3, 1, true) ;
-    print_Clone_ES_links() ;
-     
-    for ($ind = 1 ; $ind <= count($all_res_data[1][1]) ; $ind++) {
-        $volume_type = get_volume_type($all_res_data[1][1][$ind]["interface"]) ;
-        list($start, $storageclass, $disp_head) = storgeclass_header($volume_type, $storageclass, $start) ;
-        if ($disp_head) {
-            display_test_results_header("pvc_clone_mf") ;
-        }
-        start_tr(4) ;
-        TD(5, '', $all_res_data[1][1][$ind]["pvc_size"]) ;
-        TD(5, '', format_numbers($all_res_data[1][1][$ind]['files_number'])) ;
-        display_data_section($ind, "average_clone_creation_time", 'down') ;
-        display_data_section($ind, "average_clone_deletion_time", 'down') ;
         close_tr(4) ;        
     }
     close_table(3) ;
@@ -372,45 +214,21 @@ function print_compress_test_results(){
             $op2 = $all_res_data[1][1][$ind]['operations'][1] ;
             array_push($storageclass, $io_pattern) ;
             if ($start) {
-                //start_tr(4) ;
-                //for ($i = 1 ; $i <= count($graph_data[$op]) ; $i++) {
-                    //$ds = "ds" . $i . "=";
-                    //for ($j = 0 ; $j < count($graph_data[$op][$i]) ; $j++) {
-                    //    $ds .= (int)$graph_data[$op][$i][$j] . "," ;
-                    //}
-                    //$DS .= "&" . substr($ds, 0, -1) ;
-                //}
-                //close_tr(4) ;
  
                 start_tr(4) ;
             
                 Generate_cmp_fio_graph(($ind-1), 'rbd', $BS) ;
-                //print_r($graph_data);
-                //Generate_fio_cmp_graph($ind, 'rbd') ;
-                //start_td(5) ;
-                //echo $op1 . " Graph</br>" . $BS . $DS ;
-                //close_td(5) ;
-    
-                //start_td(5) ;
-                //echo $op2 . " Graph" ;
-                //close_td(5) ;
-    
-                //close_tr(4) ;
            
                 close_table(3) ; 
                 $DS = "" ;
                 $op1 = $all_res_data[1][1][$ind]['operations'][0] ;
                 $op2 = $all_res_data[1][1][$ind]['operations'][1] ;
-                //echo "=====> " . $ind . " <=======";    
-                //echo "====</br>" .$BS . "^^^^^</br>" ;   
                 $BS = "&bs=" ;
    
             }
             else { $start = true ; }
             H(2, "Results for " . $io_pattern . " I/O on RBD", 3) ;
             start_fio_table();
-            //echo "All BlockSizes are : " . $BS . " Operation = " . $op1;
-            //echo " The results are : " . $DS ;
             $graph_data = [] ;
 
         }
@@ -421,22 +239,9 @@ function print_compress_test_results(){
         $bs = $data[$ind]['block_sizes'][0] ;
         $BS .= $bs . "," ;
         $DS .= "&ds" . $ind . "=" .$data[$ind]['all_results'][$bs][$op1]['IOPS'] ; 
-        //echo "A ====</br>" .$BS . "^^^^^</br>" ;   
-        //echo "====</br>" ; print_r($data[$ind]['all_results'][$bs]) ; echo "^^^^^</br>" ;
     }
     start_tr(4) ;
     Generate_cmp_fio_graph(($ind-1), 'rbd', $BS) ;
-
-    //Generate_fio_cmp_graph(2, 'rbd') ;
-    //start_td(5) ;
-    //echo $op1 . " Graph" ;
-    //close_td(5) ;
-
-    //start_td(5) ;
-    //echo $op2 . " Graph" ;
-    //close_td(5) ;
-
-    //close_tr(4) ;
 
     close_table(3) ;
 }
