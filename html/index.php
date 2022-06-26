@@ -14,9 +14,7 @@ require_once 'display_config.php';
 require_once 'fio.php';
 require_once 'smallfiles.php';
 require_once 'pvc_cd_test_results.php';
-require_once 'pod_reattach_time.php' ;
 
-// no need to change anything in this function
 function display_header()
 {
     /*
@@ -70,7 +68,6 @@ function display_header()
     NL() ;
 }
 
-// no need to change anything in this function
 function no_test_found()
 {
     /*
@@ -158,8 +155,6 @@ function get_result_data($sql)
     global $total_to_compare;
     global $client;
 
-    //echo "Going to run $sql \n</br>\n";
-
     $my_test_res = $GLOBALS['conn']->query($sql);
 
     $results = []; // The main results array
@@ -173,7 +168,6 @@ function get_result_data($sql)
         // Running for each sample results for the same test
         while ($row = $my_test_res->fetch_array()) {
             $i++;
-            //echo '  >>>  Reading test number : ' . $i . "</br>\n";
 
             $es_indexs = explode(',', $row['es_link']);
             $ind = 0 ;
@@ -390,60 +384,24 @@ if (isset($input_data['submit'])) {
                     debug('Generating comparisone report for ' . count($all_res_data) . ' tests') ;
                     print_test_configuration($all_res_data) ;
                      if (strtolower($test_name) == 'fio') {
+                        // TODO: Need to be more generic
                         print_fio_test_results() ;
                     }
-                    if (strtolower($test_name) == 'fio-compress') {
+                    elseif (strtolower($test_name) == 'fio-compress') {
+                         // TODO: Need to be more generic
                         print_compress_test_results() ;
                     }
-                    if (strtolower($test_name) == 'smallfiles') {
+                    elseif (strtolower($test_name) == 'smallfiles') {
+                         // TODO: Need to be more generic
                         print_smallfiles_test_results() ;
                     }
-                    if (strtolower($test_name) == 'pvc create-delete') {
-                        print_pvc_cd_test_results() ;
+                    elseif (strtolower($test_name) == 'pvc snapshot - multiple files') {
+                        // TODO: The test need to be fix, and then this can be deleted.
+                        // print_pvc_snapshot_multi_files_results() ;
                     }
-                    if (strtolower($test_name) == 'pvc bulk creation-deletion') {
-                        print_pvc_bulk_cd_test_results() ;
+                     else {
+                        print_test_results($test_name) ; 
                     }
-                    if (strtolower($test_name) == 'pvc bulk creation-after-deletion') {
-                        print_pvc_bulk_cad_test_results() ;
-                    }
-                    if (strtolower($test_name) == 'bulk clone creation') {
-                        print_bulk_clonec_create_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc snapshot performance') {
-                        print_pvc_snapshot_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc snapshot - multiple files') {
-                        print_pvc_snapshot_multi_files_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc snapshot') {
-                        print_pvc_snapshot_results() ;
-                    }
-                    if (strtolower($test_name) == 'bulk pod attach time') {
-                        print_bulk_pod_attach_time_results() ;
-                    }
-                    if (strtolower($test_name) == 'pod reattach') {
-                        print_pod_reattach_time_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc attach time') {
-                        print_pvc_attach_time_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc multi clone') {
-                        print_pvc_multi_clone_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc multi clone performance') {
-                        print_pvc_multi_clone_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc clone performance') {
-                        print_pvc_clone_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc multiple snapshots creation') {
-                        print_pvc_multi_snap_results() ;
-                    }
-                    if (strtolower($test_name) == 'pvc clone multiple files performance') {
-                        print_pvc_clone_mf_results() ;
-                    }
-                    
                 } else {
                     no_test_found() ;
                 }

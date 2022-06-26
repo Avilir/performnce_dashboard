@@ -1,96 +1,5 @@
 <?php
 
-require_once 'main.php';
-
-$headers_data = array(
-    "pvc_cd" => array(
-        "1" => array("title" => "PV Size", "compare" => false) ,
-        "2" => array("title" => "Creation Time (Sec.)", "compare" => true) ,
-        "3" => array("title" => "Deletion Time (Sec.)", "compare" => true) ,
-    ),
-    "pvc_bulk_cd" => array(
-        "1" => array("title" => "PV Size", "compare" => false) ,
-        "2" => array("title" => "Bulk Size", "compare" => false) ,
-        "3" => array("title" => "Creation Time (Sec.)", "compare" => true) ,
-        "4" => array("title" => "Deletion Time (Sec.)", "compare" => true) ,
-    ),
-    "pvc_bulk_cad" => array(
-        "1" => array("title" => "PV Size", "compare" => false) ,
-        "2" => array("title" => "Bulk Size</br>(To delete & recreate)", "compare" => false) ,
-        "3" => array("title" => "Creation After Deletion Time (Sec.)", "compare" => true) ,
-    ),
-    "pvc_snap" => array(
-        "1" => array("title" => "PV Size", "compare" => false) ,
-        "2" => array("title" => "Creation Time (Sec.)", "compare" => true) ,
-        "3" => array("title" => "Restore Time (Sec.)", "compare" => true) ,
-        "4" => array("title" => "Restore Speed (MiB/Sec.)", "compare" => true) ,
-    ),
-    "pvc_multi_delete" => array(
-        "1" => array("title" => "Volume Type", "compare" => false) ,
-        "2" => array("title" => "PVC Size", "compare" => false) ,
-        "3" => array("title" => "PVC's Count", "compare" => false) ,
-        "4" => array("title" => "Deletion Time (Sec.)", "compare" => true) ,   
-   ),
-    "bulk_clone" => array(
-        "1" => array("title" => "Interface", "compare" => false) ,
-        "2" => array("title" => "PVC Size", "compare" => false) ,
-        "3" => array("title" => "Data Size (MiB)", "compare" => false) ,
-        "4" => array("title" => "Bulk Size", "compare" => false) ,   
-        "5" => array("title" => "Creation Time (Sec.)", "compare" => true) ,
-        "6" => array("title" => "Creation Speed (MiB/Sec.)", "compare" => true) ,   
-    ),
-    "pvc_multi_clone" => array(
-        "1" => array("title" => "Clone Size (GiB)", "compare" => false) ,
-        "2" => array("title" => "Clone Numbers", "compare" => false) ,
-        "3" => array("title" => "Avg. Clone Time (Sec.)", "compare" => true) ,
-        "4" => array("title" => "Avg. Clone Speed (MiB/Sec.)", "compare" => true) ,   
-    ),
-    "pvc_clone" => array(
-        "1" => array("title" => "PVC Size (GiB)", "compare" => false) ,
-        "2" => array("title" => "Creation Time (Sec.)", "compare" => true) ,
-        "3" => array("title" => "Creation Speed (MiB/Sec.)", "compare" => true) ,
-        "4" => array("title" => "Deletion Time (Sec.)", "compare" => true) ,   
-    ),
-    "pvc_clone_mf" => array(
-        "1" => array("title" => "PVC Size (GiB)", "compare" => false) ,
-        "2" => array("title" => "Number of files", "compare" => false) ,
-        "3" => array("title" => "Creation Time (Sec.)", "compare" => true) ,
-        "4" => array("title" => "Deletion Time (Sec.)", "compare" => true) ,   
-    ),
-    "multi_snap" => array(
-        "1" => array("title" => "PVC Size (GiB)", "compare" => false) ,
-        "2" => array("title" => "Snapshots Number", "compare" => false) ,
-        "3" => array("title" => "Avg. Creation Time (Sec.)", "compare" => true) ,
-        "4" => array("title" => "Avg. Creation Speed (MiB/Sec.)", "compare" => true) ,   
-    ),
-    "multi_snap_with_files" => array(
-        "1" => array("title" => "Files size (KiB)", "compare" => false) ,
-        "2" => array("title" => "Number of files", "compare" => false) ,
-        "3" => array("title" => "Total Dataset (GiB)", "compare" => false) ,
-        "4" => array("title" => "Avg. Creation Time (Sec.)", "compare" => true) ,   
-    ),
-    "bulk_pod_attach" => array(
-        "1" => array("title" => "Volume Type", "compare" => false) ,
-        "2" => array("title" => "Bulk size (POD's)", "compare" => false) ,
-        "3" => array("title" => "PV Size", "compare" => false) ,
-        "4" => array("title" => "Attach Time (Sec.)", "compare" => true) ,   
-    ),
-    "pod_reattach" => array(
-        "1" => array("title" => "Volume Type", "compare" => false) ,
-        "2" => array("title" => "Number of samples", "compare" => false) ,
-        "3" => array("title" => "Total files", "compare" => false) ,
-        "4" => array("title" => "Total Data (GiB)", "compare" => false) ,
-        "5" => array("title" => "ReAttach Time (Sec.)", "compare" => true) ,   
-    ),
-    "pvc_attach" => array(
-        "1" => array("title" => "Volume Type", "compare" => false) ,
-        "2" => array("title" => "Number of samples", "compare" => false) ,
-        "3" => array("title" => "PVC Size (GiB)", "compare" => false) ,
-        "4" => array("title" => "STD Deviation (%)", "compare" => false) ,
-        "5" => array("title" => "Attach Time (Sec.)", "compare" => true) ,
-    ),
-);
-
 function display_multi_line_td($title){
     global $rspan ;
     TD(5, "rowspan=" . $rspan, $title) ;
@@ -141,17 +50,15 @@ function display_data_section ($ind, $key, $diff_dir) {
 
 }
 
-function display_test_results_header($test_name){
+function display_test_results_header($data){
 
-    global $headers_data ;
     $compers = 0 ;
-    $data = $headers_data[$test_name] ;
 
     start_table(3, "fio_tbl") ;
 
     // Display the first line in the table
     start_tr(4) ;
-    for ($c = 1 ; $c <= count($data) ; $c++) {
+    for ($c = 0 ; $c < count($data) ; $c++) {
         if ($data[$c]['compare']) {
             $compers++ ;
             display_multi_col_td($data[$c]['title']) ;
